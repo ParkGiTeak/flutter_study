@@ -9,6 +9,14 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int count = 10;
+  String _text = '';
+  final _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose(); // 다쓰고 해제해줘야지 메모리 누수 방지
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +32,12 @@ class _MainPageState extends State<MainPage> {
                 width: 100,
                 height: 100,
               ),
-              SizedBox(height: 30,),
-              Container(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                height: 30,
+              ),
               Text(
                 '숫자',
                 style: TextStyle(
@@ -54,14 +66,32 @@ class _MainPageState extends State<MainPage> {
                 onPressed: () {},
                 child: Text('OutlinedButton'),
               ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: '글자', // 클릭전 힌트 형식에서 누르면 상단으로 이동
-                  border: OutlineInputBorder(), // 외곽선
-                ),
-                onChanged: (text) {
-                  print(text);
-                },
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: TextField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        labelText: '글자', // 클릭전 힌트 형식에서 누르면 상단으로 이동
+                        border: OutlineInputBorder(), // 외곽선
+                      ),
+                      onChanged: (text) {
+                        _text = text;
+                        // print(text);
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print(_textController.text);
+                      },
+                      child: Text('login'),
+                    ),
+                  ),
+                ],
               ),
               Image.network(
                 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT15RrII6lkLU_aF06n_JjKUxYKIW_iPqwlj1cDw19tWV1asbxquziiHB6b34qqvDMKYLRD_g',
